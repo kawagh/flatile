@@ -25,7 +25,6 @@ fun main() = application {
 @Composable
 @Preview
 fun App() {
-    var text by remember { mutableStateOf("Hello, World!") }
     val sampleBooks = List(10) {
         sampleBook
     }
@@ -47,11 +46,6 @@ fun App() {
                 }
             }
 
-            Button(onClick = {
-                text = "Hello, Desktop!"
-            }) {
-                Text(text)
-            }
             LazyColumn {
                 itemsIndexed(sampleBooks) { index, book ->
                     Row {
