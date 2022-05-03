@@ -12,12 +12,14 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.awt.ComposeWindow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import data.Document
 import data.sampleBook
 import ui.Document
+import java.awt.FileDialog
 
 
 fun main() = application {
@@ -32,9 +34,10 @@ fun App() {
     val sampleBooks = List(10) {
         sampleBook
     }
-
     // for searchForm
     var searchText by remember { mutableStateOf("") }
+
+    var selectedFileContent by remember { mutableStateOf("") }
 
     MaterialTheme {
         Column(
@@ -42,6 +45,19 @@ fun App() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top,
         ) {
+            Button(
+                onClick = {
+                    val selectedFile = FileDialog(
+                        ComposeWindow()
+                    ).apply {
+                        isVisible = true
+                    }.files.first()
+                    selectedFileContent = selectedFile.readText()
+                }
+            ) {
+                Text("read file")
+            }
+            Text(selectedFileContent)
             // searchForm
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                 TextField(searchText, { searchText = it }, singleLine = true)
