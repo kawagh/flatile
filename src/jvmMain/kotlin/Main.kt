@@ -1,7 +1,10 @@
 // Copyright 2000-2021 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE file.
 import androidx.compose.desktop.ui.tooling.preview.Preview
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -12,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
+import data.Document
 import data.sampleBook
 import ui.Document
 
@@ -45,15 +49,41 @@ fun App() {
                     Icon(Icons.Default.Search, "search")
                 }
             }
+            ListBooks(sampleBooks)
+            GridBooksWithExp(sampleBooks)
+        }
+    }
+}
 
-            LazyColumn {
-                itemsIndexed(sampleBooks) { index, book ->
-                    Row {
-                        Text(index.toString())
-                        Spacer(modifier = Modifier.size(30.dp))
-                        Document(book)
-                    }
-                }
+
+/**
+ * (Experimental)
+ * when this function will be removed, use ListBooks
+ */
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun GridBooksWithExp(books: List<Document.Book>) {
+    LazyVerticalGrid(
+        cells = GridCells.Adaptive(minSize = 120.dp)
+    ) {
+        itemsIndexed(books) { index, book ->
+            Row {
+                Text(index.toString())
+                Spacer(modifier = Modifier.size(30.dp))
+                Document(book)
+            }
+        }
+    }
+}
+
+@Composable
+fun ListBooks(books: List<Document.Book>) {
+    LazyColumn {
+        itemsIndexed(books) { index, book ->
+            Row {
+                Text(index.toString())
+                Spacer(modifier = Modifier.size(30.dp))
+                Document(book)
             }
         }
     }
